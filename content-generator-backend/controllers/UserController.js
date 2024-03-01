@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
-//Registration
+//*Registration
 const register = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -49,7 +49,7 @@ const register = asyncHandler(async (req, res) => {
   });
 });
 
-//Login
+//*Login
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -92,7 +92,7 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-//Logout
+//*Logout
 const logout = asyncHandler(async (req, res) => {
   res.cookie("token", "", {
     maxAge: 1, //1 milli sec
@@ -102,12 +102,10 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-//Profile
+//*Profile
 const userProfile = asyncHandler(async (req, res) => {
-  const id = req.user?._id;
-
   //*exclude password
-  const user = await User.findById(id).select("-password");
+  const user = await User.findById(req?.user.id).select("-password");
   if (user) {
     res.status(200).json({
       status: "success",
