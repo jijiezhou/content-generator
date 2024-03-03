@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-01 15:54:45
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-01 16:11:09
+ * @LastEditTime: 2024-03-03 10:44:06
  */
 const asyncHandler = require("express-async-handler");
 const User = require("../models/User");
@@ -26,7 +26,7 @@ const checkApiRequestLimit = asyncHandler(async (req, res, next) => {
   let requestLimit = 0;
 
   //check if user is in trial period
-  if (user?.isTrialActive) {
+  if (user?.trialActive) {
     requestLimit = user?.monthlyRequestCount;
   }
 

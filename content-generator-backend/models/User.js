@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-02-29 13:21:15
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-01 16:41:56
+ * @LastEditTime: 2024-03-03 10:43:45
  */
 const mongoose = require("mongoose");
 
@@ -74,9 +74,9 @@ const userSchema = new mongoose.Schema(
 );
 
 //! Add virtual property
-userSchema.virtual("isTrialActive").get(function () {
-  return this.trialActive && new Date() < this.trialExpires;
-});
+// userSchema.virtual("isTrialActive").get(function () {
+//   return this.trialActive && new Date() < this.trialExpires;
+// });
 
 //! Compile to form the model
 const User = mongoose.model("User", userSchema);

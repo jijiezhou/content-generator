@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: ZJJ Code
+ * @version: 1.0.0
+ * @Author: ZJJ
+ * @Date: 2024-02-29 14:16:30
+ * @LastEditors: ZJJ
+ * @LastEditTime: 2024-03-03 11:02:05
+ */
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -105,7 +113,10 @@ const logout = asyncHandler(async (req, res) => {
 //*Profile
 const userProfile = asyncHandler(async (req, res) => {
   //*exclude password
-  const user = await User.findById(req?.user.id).select("-password");
+  const user = await User.findById(req?.user.id)
+    .select("-password")
+    .populate("payments")
+    .populate("history");
   if (user) {
     res.status(200).json({
       status: "success",
@@ -118,10 +129,23 @@ const userProfile = asyncHandler(async (req, res) => {
 });
 
 //Check User Auth Status
+const checkAuth = asyncHandler(async (req, res) => {
+  const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+  if (decoded) {
+    res.json({
+      isAuthenticated: true,
+    });
+  } else {
+    res.json({
+      isAuthenticated: false,
+    });
+  }
+});
 
 module.exports = {
   register,
   login,
   logout,
   userProfile,
+  checkAuth,
 };

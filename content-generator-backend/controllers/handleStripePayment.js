@@ -4,13 +4,14 @@
  * @Author: ZJJ
  * @Date: 2024-03-01 16:26:00
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-02 23:00:19
+ * @LastEditTime: 2024-03-03 10:29:09
  */
 const asyncHandler = require("express-async-handler");
 const calculateNextBillingDate = require("../utils/calculateNextBillingDate");
 const shouldRenewSubscriptionPlan = require("../utils/shouldRenewSubscriptionPlan");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Payment = require("../models/Payment");
+const User = require("../models/User");
 
 //Stripe Payment
 const handleStripePayment = asyncHandler(async (req, res) => {
@@ -22,6 +23,10 @@ const handleStripePayment = asyncHandler(async (req, res) => {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(amount) * 100,
     currency: "usd",
+    // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+    automatic_payment_methods: {
+      enabled: true,
+    },
     //add some meta data
     metadata: {
       userId: user?._id?.toString(),
@@ -46,11 +51,91 @@ const handleStripePayment = asyncHandler(async (req, res) => {
   }
 });
 
+//Verify Payment
+const verifyPayment = asyncHandler(async (req, res) => {
+  const { paymentId } = req.params;
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+
+    //todo paymentIntent status should be "succeeded"
+    if (paymentIntent.status === "requires_payment_method") {
+      //!Get the info from metadata
+      const metadata = paymentIntent?.metadata;
+      const subscriptionPlan = metadata?.subscriptionPlan;
+      const userEmail = metadata?.userEmail;
+      const userId = metadata?.userId;
+
+      //!Find the user
+      const userFound = await User.findById(userId);
+      if (!userFound) {
+        return res.status(404).json({
+          status: "false",
+          message: "User Not Found",
+        });
+      }
+
+      //!Get payment details
+      const amount = paymentIntent?.amount / 100;
+      const currency = paymentIntent?.currency;
+      const paymentId = paymentIntent?.id;
+
+      const newPayment = await Payment.create({
+        user: userId,
+        email: userEmail,
+        subscriptionPlan,
+        amount,
+        currency,
+        status: "success",
+        reference: paymentId,
+      });
+
+      //!Check Subscription Plan
+      if (subscriptionPlan === "Basic") {
+        //!Update user
+        const updateUser = await User.findByIdAndUpdate(userId, {
+          subscriptionPlan,
+          trialPeriod: 0,
+          nextBillingDate: calculateNextBillingDate(),
+          apiRequestCount: 0,
+          monthlyRequestCount: 50,
+          subscriptionPlan: "Basic",
+          $addToSet: { payments: newPayment?._id },
+        });
+        res.json({
+          status: "true",
+          message: "Payment verified, User updated",
+          updateUser,
+        });
+      }
+
+      if (subscriptionPlan === "Premium") {
+        //!Update user
+        const updateUser = await User.findByIdAndUpdate(userId, {
+          subscriptionPlan,
+          trialPeriod: 0,
+          nextBillingDate: calculateNextBillingDate(),
+          apiRequestCount: 0,
+          monthlyRequestCount: 100,
+          subscriptionPlan: "Premium",
+          $addToSet: { payments: newPayment?._id },
+        });
+        res.json({
+          status: "true",
+          message: "Payment verified, User updated",
+          updateUser,
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+});
+
 //Handle Free Subscription
 const handleFreeSubscription = asyncHandler(async (req, res) => {
   //!Get the login user
   const user = req?.user;
-  console.log(user);
 
   //!Check if user account should be renew or not
   try {
@@ -96,4 +181,4 @@ const handleFreeSubscription = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { handleStripePayment, handleFreeSubscription };
+module.exports = { handleStripePayment, handleFreeSubscription, verifyPayment };
