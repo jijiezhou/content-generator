@@ -4,15 +4,19 @@
  * @Author: ZJJ
  * @Date: 2024-03-01 16:28:51
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-01 16:29:59
+ * @LastEditTime: 2024-03-02 22:31:44
  */
 const express = require("express");
-const handleStripePayment = require("../controllers/handleStripePayment");
+const {
+  handleStripePayment,
+  handleFreeSubscription,
+} = require("../controllers/handleStripePayment");
 
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 const stripeRouter = express.Router();
 
 stripeRouter.post("/checkout", isAuthenticated, handleStripePayment);
+stripeRouter.post("/free-plan", isAuthenticated, handleFreeSubscription);
 
 module.exports = stripeRouter;
