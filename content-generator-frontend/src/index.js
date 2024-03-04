@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 15:16:14
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 15:30:29
+ * @LastEditTime: 2024-03-04 17:42:13
  */
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -13,6 +13,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AuthProvider } from "./AuthContext/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -23,7 +24,9 @@ root.render(
   <React.StrictMode>
     {/*Provide the client to your App*/}
     <QueryClientProvider client={queryClient}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>

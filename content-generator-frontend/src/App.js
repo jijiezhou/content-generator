@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 15:16:14
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 17:26:23
+ * @LastEditTime: 2024-03-04 17:50:24
  */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Registration from "./components/Users/Register";
@@ -15,13 +15,17 @@ import PrivateNavbar from "./components/Navbar/PrivateNavbar";
 import Home from "./components/Home/Home";
 import FreeTrial from "./components/Home/FreeTrial";
 import HomeFeatures from "./components/Home/HomeFeatures";
+import { useAuth } from "./AuthContext/AuthContext";
 
 export default function App() {
+  //! Custom hook
+  const { isAuthenticated } = useAuth();
+
   return (
     <>
       <BrowserRouter>
         {/*Navbar */}
-        <PrivateNavbar />
+        {isAuthenticated ? <PrivateNavbar /> : <PublicNavbar />}
         <Routes>
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />
