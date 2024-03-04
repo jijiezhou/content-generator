@@ -1,11 +1,3 @@
-/*
- * @Descripttion: ZJJ Code
- * @version: 1.0.0
- * @Author: ZJJ
- * @Date: 2024-03-04 17:23:31
- * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 17:23:47
- */
 import { Link } from "react-router-dom";
 
 export default function FreeTrial() {
