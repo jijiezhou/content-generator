@@ -4,13 +4,14 @@
  * @Author: ZJJ
  * @Date: 2024-02-29 12:59:38
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-03 10:54:42
+ * @LastEditTime: 2024-03-04 16:28:45
  */
 const express = require("express");
 require("dotenv").config();
 const usersRouter = require("./routes/usersRouter");
 const cookieParser = require("cookie-parser");
 const cron = require("node-cron");
+const cors = require("cors");
 const errorHandler = require("./middlewares/errorMiddleware");
 const connectDB = require("./utils/connectDB");
 const openAIRouter = require("./routes/openAIRouter");
@@ -101,6 +102,12 @@ cron.schedule("0 0 1 * * *", async () => {
 app.use(express.json());
 //*parse cookie automatically
 app.use(cookieParser());
+//*allow frontend cors
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 //Routes
 app.use("/api/v1/users", usersRouter);
