@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: ZJJ Code
+ * @version: 1.0.0
+ * @Author: ZJJ
+ * @Date: 2024-02-29 15:02:10
+ * @LastEditors: ZJJ
+ * @LastEditTime: 2024-03-21 17:51:48
+ */
 const mongoose = require("mongoose");
 
 const connectDB = async () => {

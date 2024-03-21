@@ -4,18 +4,10 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 17:19:03
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 18:20:04
- */
-/*
- * @Descripttion: ZJJ Code
- * @version: 1.0.0
- * @Author: ZJJ
- * @Date: 2024-03-04 17:19:03
- * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 17:32:01
+ * @LastEditTime: 2024-03-21 16:38:39
  */
 import HomeFeatures from "./HomeFeatures";
-import FreeTrial from "./Freetrail";
+import FreeTrial from "./FreeTrial";
 import ai from "../../assets/ai.png";
 import { Link } from "react-router-dom";
 export default function Home() {

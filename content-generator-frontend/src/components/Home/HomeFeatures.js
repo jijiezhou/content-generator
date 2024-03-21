@@ -1,11 +1,3 @@
-/*
- * @Descripttion: ZJJ Code
- * @version: 1.0.0
- * @Author: ZJJ
- * @Date: 2024-03-04 17:22:59
- * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 17:23:03
- */
 import React from "react";
 import ai1 from "../../assets/robot-with-wrench.png";
 import blink from "../../assets/blink-sm.png";

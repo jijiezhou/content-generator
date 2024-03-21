@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 17:33:21
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-04 18:05:37
+ * @LastEditTime: 2024-03-05 13:48:04
  */
 import { createContext, useContext, useEffect, useState } from "react";
 import { CheckUserAuthStatusAPI } from "../apis/user/usersAPI";
@@ -14,6 +14,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
   //! Make request using react query
   //! set unique key for query
   const { isError, isLoading, data, isSuccess } = useQuery({
@@ -23,8 +24,10 @@ export const AuthProvider = ({ children }) => {
 
   //! Update authenticated user, whenever response data change, set to true
   useEffect(() => {
-    setIsAuthenticated(true);
-  }, [data]);
+    if (isSuccess) {
+      setIsAuthenticated(data);
+    }
+  }, [data, isSuccess]);
 
   //!Update user auth after login
   const login = () => {
