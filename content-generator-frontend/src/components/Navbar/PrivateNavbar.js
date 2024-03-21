@@ -7,6 +7,7 @@ import { FaCreativeCommonsShare } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { logoutAPI } from "../../apis/user/usersAPI";
+import { useAuth } from "../../AuthContext/AuthContext";
 
 const user = {
   name: "Tom Cook",
@@ -23,12 +24,16 @@ function classNames(...classes) {
 }
 
 export default function PrivateNavbar() {
+  //auth custom hook
+  const { logout } = useAuth();
+
   //mutation
   const mutation = useMutation({ mutationFn: logoutAPI });
 
   //handle logout
   const handleLogout = () => {
     mutation.mutate();
+    logout();
   };
 
   return (

@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 17:33:21
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-05 13:48:04
+ * @LastEditTime: 2024-03-21 18:13:35
  */
 import { createContext, useContext, useEffect, useState } from "react";
 import { CheckUserAuthStatusAPI } from "../apis/user/usersAPI";
@@ -14,7 +14,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   //! Make request using react query
   //! set unique key for query
   const { isError, isLoading, data, isSuccess } = useQuery({
