@@ -16,10 +16,16 @@ const validationSchema = Yup.object({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
-
   //! Custom hook
   const { isAuthenticated, login } = useAuth();
+
+  //! Redirect to dashboard after login
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated]);
 
   //! Mutation
   const mutation = useMutation({ mutationFn: loginAPI });

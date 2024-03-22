@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-02-29 14:16:30
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-21 17:51:26
+ * @LastEditTime: 2024-03-22 13:43:02
  */
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
@@ -116,7 +116,7 @@ const userProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req?.user.id)
     .select("-password")
     .populate("payments")
-    .populate("history");
+    .populate("contentHistory");
   if (user) {
     res.status(200).json({
       status: "success",

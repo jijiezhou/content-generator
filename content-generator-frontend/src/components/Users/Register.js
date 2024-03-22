@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { registerAPI } from "../../apis/user/usersAPI";
 import { toHaveFormValues } from "@testing-library/jest-dom/matchers";
 import StatusMessage from "../Alert/StatusMessage";
+import { useAuth } from "../../AuthContext/AuthContext";
 
 //! Validation schema
 const validationSchema = Yup.object({
@@ -17,7 +18,16 @@ const validationSchema = Yup.object({
 });
 
 const Registration = () => {
+  //! Custom hook
+  const { isAuthenticated } = useAuth();
+
+  //! Redirect to dashboard after login
   const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated]);
 
   //!Mutation
   const mutation = useMutation({ mutationFn: registerAPI });
@@ -41,7 +51,7 @@ const Registration = () => {
       }, 500);
     },
   });
-  console.log(mutation);
+  //console.log(mutation);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900">

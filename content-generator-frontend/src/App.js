@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 15:16:14
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-21 16:44:18
+ * @LastEditTime: 2024-03-21 18:41:27
  */
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Registration from "./components/Users/Register";
@@ -16,11 +16,11 @@ import Home from "./components/Home/Home";
 import FreeTrial from "./components/Home/FreeTrial";
 import HomeFeatures from "./components/Home/HomeFeatures";
 import { useAuth } from "./AuthContext/AuthContext";
+import AuthRoute from "./components/AuthRoute/AuthRoute";
 
 export default function App() {
   //! Custom hook
   const { isAuthenticated } = useAuth();
-  //console.log(isAuthenticated);
 
   return (
     <>
@@ -30,7 +30,14 @@ export default function App() {
         <Routes>
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <AuthRoute>
+                <Dashboard />
+              </AuthRoute>
+            }
+          />
           <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>

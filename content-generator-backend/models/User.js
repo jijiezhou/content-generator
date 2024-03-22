@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-02-29 13:21:15
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-03 10:43:45
+ * @LastEditTime: 2024-03-22 13:42:50
  */
 const mongoose = require("mongoose");
 
@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
         ref: "Payment",
       },
     ],
-    history: [
+    contentHistory: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ContentHistory",

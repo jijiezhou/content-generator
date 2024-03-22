@@ -4,7 +4,7 @@
  * @Author: ZJJ
  * @Date: 2024-03-04 16:11:21
  * @LastEditors: ZJJ
- * @LastEditTime: 2024-03-21 17:33:15
+ * @LastEditTime: 2024-03-22 13:44:14
  */
 import axios from "axios";
 
@@ -55,6 +55,17 @@ export const logoutAPI = async () => {
   const response = await axios.post(
     "http://localhost:8090/api/v1/users/logout",
     {},
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
+
+//*getUserProfile
+export const getUserProfileAPI = async () => {
+  const response = await axios.get(
+    "http://localhost:8090/api/v1/users/profile",
     {
       withCredentials: true,
     }
